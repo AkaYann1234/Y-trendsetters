@@ -30,6 +30,12 @@ coverage/
 # Ionic specific
 platforms/
 plugins/
+hooks/
+resources/
+
+# Capacitor specific (if using Capacitor instead of Cordova)
+android/
+ios/
 
 # Angular specific
 *.swp
@@ -39,4 +45,3 @@ plugins/
 # Temporary files
 *.tmp
 *.temp
-node_modules

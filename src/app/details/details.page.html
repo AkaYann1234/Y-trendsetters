@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" padding>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-card>
+  <ion-card-header>
+    <ion-card-title>{{ productDetails.name }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    {{ productDetails.details }}
+  </ion-card-content>
+</ion-card>
+  <button ion-button (click)="goBack()">RETOUR</button>
+</ion-content>
