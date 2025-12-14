@@ -4,6 +4,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+
 # Build outputs
 dist/
 www/
@@ -30,12 +31,6 @@ coverage/
 # Ionic specific
 platforms/
 plugins/
-hooks/
-resources/
-
-# Capacitor specific (if using Capacitor instead of Cordova)
-android/
-ios/
 
 # Angular specific
 *.swp
@@ -45,3 +40,5 @@ ios/
 # Temporary files
 *.tmp
 *.temp
+node_modules
+.angular/
