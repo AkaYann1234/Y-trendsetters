@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Y-trendsetters
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true"  padding>
+  <ion-list >
+  <ion-card-content >
+    <ion-list>
+      <ion-item *ngFor="let article of Articles" (click)="showDetails(article)">
+        <ion-thumbnail slot="start">
+          <img [src]="article.picture?.[0]" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ article.name }}</h2>
+          <p>{{ article.description }}</p>
+          <p>{{ article.price | currency }}</p>
+          <p>
+            <span *ngIf="article.averageStar >=1">
+              <ion-icon name="star"></ion-icon>
+            </span>
+            <span *ngIf="article.averageStar >=2">
+              <ion-icon name="star"></ion-icon>
+            </span>
+            <span *ngIf="article.averageStar >=3">  
+              <ion-icon name="star"></ion-icon>
+            </span>
+            <span *ngIf="article.averageStar >=4">
+              <ion-icon name="star"></ion-icon>
+            </span>
+            <span *ngIf="article.averageStar >=5">
+              <ion-icon name="star"></ion-icon>
+            </span>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+  </ion-list>
+</ion-content>
+<ion-footer>
+</ion-footer>
