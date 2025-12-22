@@ -42,8 +42,20 @@ ion-card {
   margin: 10px 0;
   border-radius: 12px;
   
-  ion-card-title {
+ion-card-title {
     font-weight: bold;
     font-size: 1.4rem;
-  }
+}
+}
+.disposition-choisir-couleur {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.choisir-couleur {
+    align-items: center;
+    display: inline-block;
+    margin: 10px 0;
+    font-weight: 600;
 }

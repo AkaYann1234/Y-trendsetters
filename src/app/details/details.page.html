@@ -18,12 +18,15 @@
       </swiper-slide>
     </swiper-container>
   </div>
+
   <ion-card *ngIf="productDetails">
   <ion-card-header>
     <ion-card-title>{{ productDetails.name }}</ion-card-title>
     <ion-card-subtitle>{{ productDetails.category }} - {{ productDetails.city }}</ion-card-subtitle>
   </ion-card-header>
-
+  <ion-chip class="disposition-choisir-couleur" (click)="choisirCouleur()">
+    <ion-label class="choisir-couleur" color="secondary">choisir la couleur</ion-label>
+  </ion-chip>
   <ion-card-content>
     <p><strong>Description:</strong> {{ productDetails.description }}</p>
     <p><strong>Détails:</strong> {{ productDetails.details }}</p>
@@ -33,6 +36,12 @@
     <p><strong>Note moyenne:</strong> {{ productDetails.averageStar }} ⭐ ({{ productDetails.numberOfReviews }} avis)</p>
   
   </ion-card-content>
-</ion-card>
+
+  </ion-card>
+  <ion-card-footer>
+    <ion-button expand="block" color="secondary" (click)="commander()">
+      COMMANDER 
+    </ion-button>
+  </ion-card-footer>
   <!-- <ion-button  (click)="goBack()">RETOUR</ion-button> -->
 </ion-content>
