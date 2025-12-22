@@ -1,0 +1,49 @@
+// Conteneur global pour les slides
+.slides-container {
+  width: 100%;
+  margin-bottom: 15px;
+  background: #f4f4f4d1; 
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+// Configuration de l'affichage des images dans Swiper
+swiper-container {
+  height: 300px; // Hauteur fixe pour éviter que la page ne saute
+  --swiper-pagination-color: var(--ion-color-primary); // Couleur des points
+  --swiper-theme-color: var(--ion-color-primary);
+}
+
+swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-height: 100%;
+    width: 100%;
+    object-fit: cover; // L'image remplit le cadre proprement
+  }
+}
+
+// Style pour l'élément cliquable (curseur main)
+.mon-element-cliquable {
+  cursor: pointer;
+  transition: transform 0.1s ease;
+
+  &:active {
+    transform: scale(0.98); // Petit effet d'enfoncement au clic
+  }
+}
+
+// Amélioration de la carte de détails
+ion-card {
+  margin: 10px 0;
+  border-radius: 12px;
+  
+  ion-card-title {
+    font-weight: bold;
+    font-size: 1.4rem;
+  }
+}

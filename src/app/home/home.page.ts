@@ -39,14 +39,19 @@ export class HomePage {
           city: 'Lyon',
           averageStar: 4,
           numberOfReviews: 5,
-          picture: ['assets/icon/imgs/Iphone17.jpg']
+          picture: [
+            'assets/icon/imgs/PORTABLE/Iphone17.jpg',
+            'assets/icon/imgs/PORTABLE/portable.jpg',
+            'assets/icon/imgs/PORTABLE/portable1.jpg',
+            'assets/icon/imgs/PORTABLE/portable2.jpg'
+          ]
         },
         {
           id: '2',
           name: 'PC',
           description: 'macbook pro13',
           price: 1398,
-          details: 'Le MacBook Pro 13 pouces est un choix parfaite pour les étudiants et les professionnels qui recherchent un ordinateur portable performant et compact. Son design élégant et ses performances exceptionnelles en font un excellent choix pour une utilisation professionnelle ou domestique. Les utilisateurs apprécient également sa grande autonomie et ses améliorations par rapport aux modèles précédents, comme le TOUCH Bar et les haut-parleurs de meilleure qualité. ',
+          details: 'Idéal pour les étudiants et les professionnels, il séduit par son design élégant, son excellente autonomie et ses améliorations notables comme la Touch Bar et des haut-parleurs de meilleure qualité, aussi bien pour un usage professionnel que personnel.',
           category: 'Electronics',
           state: 'New',
           createdAt: new Date(),
@@ -54,14 +59,19 @@ export class HomePage {
           city: 'Toulouse',
           averageStar: 4.2,
           numberOfReviews: 8,
-          picture: ['assets/icon/imgs/MacBookPro13.jpg']
+          picture: [
+            'assets/icon/imgs/ORDINATEUR/MacBookPro13.jpg',
+            'assets/icon/imgs/ORDINATEUR/PC.jpg',
+            'assets/icon/imgs/ORDINATEUR/PC1.jpg',
+            'assets/icon/imgs/ORDINATEUR/PC2.jpg'
+          ]
         },
         {
           id: '3',
           name: 'souris',
           description: 'Souris Gamer',
           price: 13,
-          details: 'Une bonne souris gamer, c’est bien plus qu’un simple périphérique : c’est l’extension naturelle de votre main dans l’univers du jeu. Avec un capteur ultra-précis, un temps de réponse fulgurant et une ergonomie pensée pour les longues sessions, elle transforme chaque clic en une action décisive.Que vous soyez adepte des FPS nerveux, des MMO stratégiques ou des MOBA intenses, la bonne souris peut faire toute la différence : plus de confort, plus de réactivité, et surtout… plus de victoires. ?',
+          details: 'Grâce à sa précision, sa rapidité et son ergonomie, elle améliore le confort et la réactivité, quel que soit votre style de jeu, pour des performances optimales et plus de victoires.',
           category: 'Electronics',
           state: 'New',
           createdAt: new Date(),
@@ -69,14 +79,19 @@ export class HomePage {
           city: 'Paris',
           averageStar: 4.5,
           numberOfReviews: 10,
-          picture: ['assets/icon/imgs/SourisGamer.jpg']
+          picture: [
+            'assets/icon/imgs/SOURIS/SourisGamer.jpg',
+            'assets/icon/imgs/SOURIS/souris.jpg',
+            'assets/icon/imgs/SOURIS/souris1.jpg',
+            'assets/icon/imgs/SOURIS/souris2.jpg'
+          ]
         },
         {
           id: '4',
           name: 'wifi',
           description: 'routeur wifi',
           price: 81,
-          details: 'Imaginez avoir votre propre bulle de connexion, partout où vous allez Ce routeur Wi-Fi portable, compact et élégant, transforme chaque lieu en hotspot privé ultra-rapide. Plus besoin de chercher un réseau public instable : vous profitez d’une connexion sécurisée, que ce soit dans un café, en voyage ou même en pleine nature.Avec sa batterie longue durée, son signal puissant et la possibilité de connecter plusieurs appareils en même temps, il devient votre meilleur allié pour travailler, streamer ou rester en contact avec vos proches, sans interruption. ???',
+          details: 'Compact et élégant, il offre une connexion rapide et sécurisée où que vous soyez. Grâce à sa batterie longue durée, son signal puissant et la connexion simultanée de plusieurs appareils, il est idéal pour travailler, voyager, streamer et rester connecté sans interruption. Facile à configurer et à utiliser.',
           category: 'Electronics',
           state: 'New',
           createdAt: new Date(),
@@ -84,7 +99,12 @@ export class HomePage {
           city: 'Marseille',
           averageStar: 3.5,
           numberOfReviews: 3,
-          picture: ['assets/icon/imgs/routeurWIFI.jpg']
+          picture: [
+            'assets/icon/imgs/WIFI/routeurWIFI.jpg',
+            'assets/icon/imgs/WIFI/wifi.jpg',
+            'assets/icon/imgs/WIFI/wifi1.jpg',
+            'assets/icon/imgs/WIFI/wifi2.jpg'
+          ]
         }
         
       ];
@@ -105,5 +125,8 @@ export class HomePage {
 
   showDetails(article: Product) {
     this.router.navigate(['/details'], { state: { articleData: article } });
+  }
+  vendreArticle() : void{
+    this.router.navigate(['/sell-article']);
   }
 }

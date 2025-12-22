@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+    <ion-toolbar *ngIf="productDetails">
+      <ion-title size="large">{{ productDetails.name }}</ion-title>
+    </ion-toolbar>
+  <div class="swiper-container" *ngIf="productDetails?.picture?.length">
+    <swiper-container pagination="true" autoplay="true">
+      <swiper-slide *ngFor="let img of productDetails.picture">
+        <img [src]="img" alt="image du produit" style="width: 100%; max-height: 300px; object-fit: contain;" />
+      </swiper-slide>
+    </swiper-container>
+  </div>
+  <ion-card *ngIf="productDetails">
+  <ion-card-header>
+    <ion-card-title>{{ productDetails.name }}</ion-card-title>
+    <ion-card-subtitle>{{ productDetails.category }} - {{ productDetails.city }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p><strong>Description:</strong> {{ productDetails.description }}</p>
+    <p><strong>Détails:</strong> {{ productDetails.details }}</p>
+    <p><strong>Prix:</strong> ${{ productDetails.price }} </p>
+    <p><strong>État:</strong> {{ productDetails.state }}</p>
+    <p><strong>Disponibilité:</strong> {{ productDetails.availability.isAvailable ? 'Disponible' : 'Non disponible' }}</p>
+    <p><strong>Note moyenne:</strong> {{ productDetails.averageStar }} ⭐ ({{ productDetails.numberOfReviews }} avis)</p>
+  
+  </ion-card-content>
+</ion-card>
+  <!-- <ion-button  (click)="goBack()">RETOUR</ion-button> -->
+</ion-content>

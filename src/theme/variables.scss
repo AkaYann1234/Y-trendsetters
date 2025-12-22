@@ -3,7 +3,7 @@
 :root {
   --ion-color-favorite: #9fb4a4;
   --ion-color-favorite-rgb: 105, 187, 123;
-  --ion-color-favorite-contrast: #ffffff9f;
+  --ion-color-favorite-contrast: #ffffffb3;
   --ion-color-favorite-contrast-rgb: 255, 255, 255;
   --ion-color-favorite-shade: #5ca56c;
   --ion-color-favorite-tint: #78c288;
@@ -16,3 +16,15 @@
   --ion-color-shade: var(--ion-color-favorite-shade);
   --ion-color-tint: var(--ion-color-favorite-tint);
 }
+$colors:(
+  primary:    #3880ff,
+  secondary:  #0cd1e8,
+  tertiary:   #6748cf,
+  success:    #10dc60,
+  warning:    #ffce00,
+  danger:     #f04141,
+  light:      #f4f5f8,
+  medium:     #989aa2,
+  dark:       #222428,
+  favorite:   #9fb4a4,
+)
