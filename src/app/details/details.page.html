@@ -4,6 +4,9 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Details</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="partager()"><ion-icon name="share-outline"></ion-icon></ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,8 +16,8 @@
     </ion-toolbar>
   <div class="swiper-container" *ngIf="productDetails?.picture?.length">
     <swiper-container pagination="true" autoplay="true">
-      <swiper-slide *ngFor="let img of productDetails.picture">
-        <img [src]="img" alt="image du produit" style="width: 100%; max-height: 300px; object-fit: contain;" />
+      <swiper-slide *ngFor="let img of productDetails.picture" >
+        <img class="myImg"[src]="img" alt="image du produit" style="width: 100%; max-height: 300px; object-fit: contain;" />
       </swiper-slide>
     </swiper-container>
   </div>
@@ -39,8 +42,8 @@
 
   </ion-card>
   <ion-card-footer>
-    <ion-button expand="block" color="secondary" (click)="commander()">
-      COMMANDER 
+    <ion-button expand="block" color="secondary" (click)="ajoutaupanier()">
+      <ion-icon name="cart"></ion-icon>&nbsp;AJOUTER AU PANIER
     </ion-button>
   </ion-card-footer>
   <!-- <ion-button  (click)="goBack()">RETOUR</ion-button> -->

@@ -4,6 +4,7 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule, NavController, NavParams, AlertController } from '@ionic/angular';
 import { Product } from '../models/interface-models';
+import { DatabaseService } from '../services/database.service';
 
 @Component({
   selector: 'app-details',
@@ -17,7 +18,7 @@ export class DetailsPage implements OnInit {
   productDetails : any;
   selectedColor: string = '';
 
-  constructor(public navCtrl: NavController, private route : ActivatedRoute, private alertController: AlertController) {}
+  constructor(public navCtrl: NavController, private route : ActivatedRoute, private alertController: AlertController, private dbService: DatabaseService) {}
 
   ngOnInit() {
     
@@ -60,21 +61,26 @@ export class DetailsPage implements OnInit {
 
     await alert.present();
   }
-  async commander() {
-  console.log('Commande passée pour le produit:', this.productDetails.name, 'Couleur:', this.selectedColor);
+  async ajoutaupanier() {
+  console.log('ajout du produit:', this.productDetails.name, 'Couleur:', this.selectedColor);
 
   // 1. Création de l'alerte de succès
   const alert = await this.alertController.create({
     header: 'Succès !',
-    message: `Votre commande pour le produit "${this.productDetails.name}" (Couleur: ${this.selectedColor || 'Par défaut'}) a été effectuée avec succès.`,
+    message: `Votre  produit "${this.productDetails.name}" (Couleur: ${this.selectedColor || 'Par défaut'}) a été ajouté avec succès. Le total à payer est de : ${this.dbService.getTotalPrice()} €.`,
     buttons: [
       {
-        text: 'OK',
+        text: 'Annuler',
+        role: 'cancel',
+        handler: () => { console.log(' annulée'); }
+      },
+      {
+        text: 'Oui, ajouter',
         handler: () => {
           // 2. Navigation vers la page de commande après avoir cliqué sur OK
-          this.navCtrl.navigateForward('/commande', {
+          this.navCtrl.navigateForward('/ajout', {
             state: {
-              commandeData: {
+              ajoutData: {
                 product: this.productDetails,
                 color: this.selectedColor
               }
@@ -84,8 +90,37 @@ export class DetailsPage implements OnInit {
       }
     ]
   });
-
+  
+  await this.dbService.addToCart(this.productDetails); // On l'enregistre dans la DB
+  this.navCtrl.navigateForward('/cart'); // On va vers le panier
   // 3. Affichage de l'alerte
   await alert.present();
 }
+
+  async partager() {
+    const alert = await this.alertController.create({
+      header: 'Partager le produit',
+      message: `Partager le produit "${this.productDetails.name}" avec vos amis !`,
+      buttons: [
+        {
+        text: 'Non',
+        role: 'cancel'
+      },
+      {
+        text: 'Oui',
+        handler: async () => {
+          const shareAlert = await this.alertController.create({
+            header: 'Partager le produit',
+            message: `Le lien du produit "${this.productDetails.name}" a été copié pour le partage !`,
+            buttons: ['OK']
+          });
+          await shareAlert.present();
+        }
+      }
+      ]
+    });
+   
+    await alert.present();
+  }
+
 }

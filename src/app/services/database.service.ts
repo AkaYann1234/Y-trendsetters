@@ -17,8 +17,25 @@ export class DatabaseService {
   // Stockage temporaire pour le navigateur (mode test)
   private browserProducts: Product[] = [];
 
+  private panier: Product[] = [];
+
   constructor() {
     this.initializeDatabase();
+    this.chargerDonnees();
+  }
+  private sauvegarder() {
+    localStorage.setItem('ma_boutique_produits', JSON.stringify(this.browserProducts));
+    localStorage.setItem('ma_boutique_panier', JSON.stringify(this.panier));
+  }
+  private chargerDonnees() {
+    const savedProducts = localStorage.getItem('ma_boutique_produits');
+    const savedPanier = localStorage.getItem('ma_boutique_panier');
+    if (savedProducts) {
+      this.browserProducts = JSON.parse(savedProducts);
+    }
+    if (savedPanier) {
+      this.panier = JSON.parse(savedPanier);
+    }
   }
 
   async initializeDatabase() {
@@ -58,6 +75,23 @@ export class DatabaseService {
       return [];
     }
   }
+  // --- SUPPRIMER ---
+async deleteProduct(productId: string): Promise<void> {
+  // On garde tous les produits SAUF celui qui a cet ID
+  this.browserProducts = this.browserProducts.filter(p => p.id !== productId);
+  this.sauvegarder();
+}
+
+// --- MODIFIER ---
+async updateProduct(updatedProduct: Product): Promise<void> {
+  // On trouve l'index du produit à modifier
+  const index = this.browserProducts.findIndex(p => p.id === updatedProduct.id);
+  
+  if (index !== -1) {
+    this.browserProducts[index] = updatedProduct; // On remplace par les nouvelles données
+    this.sauvegarder();
+  }
+}
 
   async addProduct(product: Product): Promise<void> {
     if (!this.isNative) {
@@ -82,5 +116,23 @@ export class DatabaseService {
     } catch (error) {
       console.error('Erreur ajout produit SQLite :', error);
     }
+    this.browserProducts.push(product);
+    this.sauvegarder(); // On enregistre sur le disque
   }
+  async addToCart(product: Product): Promise<void> {
+  this.panier.push(product);
+  console.log('Produit ajouté au panier:', product);
+  }
+  async getCartItems(): Promise<Product[]> {
+  return this.panier;
+ }
+  clearCart() {
+  this.panier = [];
+  this.sauvegarder();
+  console.log('Panier à été vidé');
+ }
+  getTotalPrice(): number {
+  return this.panier.reduce((total, product) => total + (product.price || 0), 0);
+  }
+  
 }

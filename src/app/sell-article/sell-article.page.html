@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Vendre un article</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="photoPrise" class="ion-margin-bottom">
+    <img [src]="photoPrise" style="border-radius: 10px; width: 100%;" />
+  </div>
+  
+  <ion-list>
+   <ion-icon *ngIf="!photoPrise" name="camera" style="font-size: 64px;" color="dark"></ion-icon>
+
+  <ion-button expand="block" (click)="chargerPhoto()" class="ion-margin-bottom">
+    {{ photoPrise ? 'CHANGER LA PHOTO' : 'APPUYEZ POUR AJOUTER UNE PHOTO' }}
+  </ion-button>
+  <ion-item>
+    <ion-label position="floating">Nom de l'article</ion-label>
+    <ion-input type="text" [(ngModel)]="nomArticle"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Prix (€)</ion-label>
+    <ion-input type="number" [(ngModel)]="prixArticle"></ion-input>
+  </ion-item>
+  </ion-list>
+  <ion-button expand="block" class="ion-margin-top" (click)="publierAnnonce()">Publier l'annonce</ion-button>
+</ion-content>

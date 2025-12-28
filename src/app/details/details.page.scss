@@ -26,7 +26,11 @@ swiper-slide {
     object-fit: cover; // L'image remplit le cadre proprement
   }
 }
-
+.myImg {
+  max-height: 100%;
+  width: 100%;
+  object-fit: cover; // L'image remplit le cadre proprement
+}
 // Style pour l'élément cliquable (curseur main)
 .mon-element-cliquable {
   cursor: pointer;

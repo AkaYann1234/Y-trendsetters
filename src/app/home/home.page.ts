@@ -3,6 +3,10 @@ import { NavController, AlertController, ActionSheetController } from '@ionic/an
 import { Router } from '@angular/router';
 import { DatabaseService } from '../services/database.service';
 import { Product } from '../models/interface-models';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+
 
 
 
@@ -129,4 +133,79 @@ export class HomePage {
   vendreArticle() : void{
     this.router.navigate(['/sell-article']);
   }
+  async ouvrirCamera() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera // Force l'ouverture de l'appareil photo
+      });
+      
+      console.log('Photo prise:', image.webPath);
+      this.router.navigate(['/sell-article'], { state: { imagePrise: image.webPath } });
+    } catch (error) {
+      console.error('Erreur caméra:', error);
+    }
+  }
+  ouvrirLePanier() {
+    this.router.navigate(['/cart']); 
+  }
+  async confirmerSuppression(article: Product) {
+  const alert = await this.AlertCtrl.create({
+    header: 'Supprimer ?',
+    message: `Voulez-vous vraiment supprimer ${article.name} ?`,
+    buttons: [
+      { text: 'Annuler', role: 'cancel' },
+      {
+        text: 'Supprimer',
+        handler: async () => {
+          await this.dbService.deleteProduct(article.id);
+          this.Articles = await this.dbService.getProducts(); // Rafraîchir la liste
+        }
+      }
+    ]
+  });
+  await alert.present();
+}
+
+async presentActionSheetModifier() {
+  const buttons = this.Articles.map(article => {
+    return {
+      text: article.name,
+      handler: () => {
+        this.modifierLesArticles(article); // Appelle de la fonction modifier article
+      }
+    };
+  });
+
+  const actionSheet = await this.actionCtrl.create({
+    header: 'Choisir l\'article à modifier',
+    buttons: [
+      ...buttons,
+      { text: 'Annuler', role: 'cancel' }
+    ]
+  });
+  await actionSheet.present();
+}
+
+  modifierLesArticles(article: Product) {
+    this.router.navigate(['/sell-article'], { state: { articleToEdit: article } });
+  }
+  async ouvrirAppareilPhoto() {
+  const image = await Camera.getPhoto({
+    quality: 90,
+    allowEditing: true,
+    resultType: CameraResultType.Uri,
+    source: CameraSource.Prompt // Propose Appareil photo OU Galerie
+  });
+
+  if (image) {
+    // On envoie l'image à la page sell-article
+    this.router.navigate(['/sell-article'], { 
+      state: { imagePrise: image.webPath } 
+    });
+   }
+  }
+
 }

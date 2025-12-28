@@ -50,15 +50,21 @@ ion-item:active {
   background-color: #dcdcdc;
 }
 .container-bouton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  width: 100%;
+  display: none; /* Le FAB gère maintenant son propre positionnement */
+}
+
+ion-fab-button {
+  border-radius: 50%; /* Assure la forme bien ronde */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ajoute une ombre pour l'effet de flottement */
 }
 
 ion-button {
   border-radius: 20px;
   min-width: 200px;
   height: 45px;
+}
+.btn-edit-thin ion-button {
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
 }

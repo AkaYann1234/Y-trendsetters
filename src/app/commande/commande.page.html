@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>commande</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 64px;"></ion-icon>
+  <h1>Commande confirmée !</h1>
+  <p *ngIf="commande">Merci pour votre achat du {{ commande.product.name }}.</p>
+  <p *ngIf="commande">Couleur choisie : {{ commande.color || 'Standard' }}</p>
+  <ion-button expand="block" (click)="goHome()">Retour à l'accueil</ion-button>
+</ion-content>
