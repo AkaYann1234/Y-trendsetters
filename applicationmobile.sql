@@ -39,3 +39,16 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Structure de la table `utilisateurs`
+CREATE TABLE IF NOT EXISTS `utilisateurs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `mot_de_passe` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+INSERT INTO `utilisateurs` (`nom`, `email`, `mot_de_passe`) VALUES
+('aka yann', 'akayannuriel123@gmail.com', 'N03k05b77@');

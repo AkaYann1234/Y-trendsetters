@@ -12,6 +12,15 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+  },
+  {
     path: 'details',
     loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule)
   },
@@ -39,6 +48,14 @@ const routes: Routes = [
     path: 'commande',
     loadChildren: () => import('./commande/commande.module').then( m => m.CommandePageModule)
   },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+  path: 'login',
+  loadComponent: () => import('./login/login.page').then(m => m.LoginPage)
+  }
 ];
 
 @NgModule({

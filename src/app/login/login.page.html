@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">login</ion-title>
+    </ion-toolbar>
+  </ion-header> 
+  <ion-list>
+    <ion-item>
+    <ion-label position="floating">Nom d'utilisateur</ion-label>
+    <ion-input type="text" [(ngModel)]="mdp"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">E-mail</ion-label>
+    <ion-input type="email" [(ngModel)]="email"></ion-input>
+  </ion-item>
+  </ion-list>
+  <ion-button expand="block" class="ion-margin-top" (click)="onLogin()">CONNECTION</ion-button>
+</ion-content>

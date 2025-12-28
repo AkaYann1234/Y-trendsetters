@@ -208,4 +208,8 @@ async presentActionSheetModifier() {
    }
   }
 
+  seConnecter() {
+    this.router.navigate(['/login']);
+  }
+
 }

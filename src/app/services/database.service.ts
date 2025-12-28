@@ -92,6 +92,20 @@ async updateProduct(updatedProduct: Product): Promise<void> {
     this.sauvegarder();
   }
 }
+async login(email: string, mdp: string): Promise<boolean> {
+  // Récupérer la liste des utilisateurs (simulée ou réelle)
+  const users = JSON.parse(localStorage.getItem('utilisateurs') || '[]');
+  
+  // Chercher l'utilisateur avec l'email et le mot de passe correspondants
+  const user = users.find((u: any) => u.email === email && u.mot_de_passe === mdp);
+  
+  if (user) {
+    // Sauvegarder l'utilisateur connecté dans la session
+    localStorage.setItem('session_utilisateur', JSON.stringify(user));
+    return true;
+  }
+  return false;
+}
 
   async addProduct(product: Product): Promise<void> {
     if (!this.isNative) {
