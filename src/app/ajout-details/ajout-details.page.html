@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Modification du {{ nomArticle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-text-center" *ngIf="photos.length > 0">
+    <img [src]="photos[0]" style="border-radius: 15px; width: 100%; max-height: 250px; object-fit: cover;" />
+  </div>
+
+  <ion-button expand="block" (click)="chargerPhoto()" fill="clear">
+    <ion-icon name="camera-outline" slot="start"></ion-icon>
+    Ajouter/Changer les photos
+  </ion-button>
+
+  <ion-list lines="full">
+    <ion-item>
+      <ion-label position="floating">Nom de l'article</ion-label>
+      <ion-input type="text" [(ngModel)]="nomArticle"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-textarea
+      [(ngModel)]="descriptionArticle"
+      autoGrow="true">
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item>
+  <ion-label position="floating">Détails</ion-label>
+  <ion-textarea
+    [(ngModel)]="detailsArticle"
+    autoGrow="true">
+  </ion-textarea>
+</ion-item> 
+
+    <ion-item>
+      <ion-label position="floating">Prix (€)</ion-label>
+      <ion-input type="number" [(ngModel)]="prixArticle"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Note de l'article (0 à 5)</ion-label>
+      <ion-input type="number" [(ngModel)]="noteArticle" min="0" max="5"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" (click)="enregistrerModifs()" class="ion-margin-top" color="success">
+    Confirmer les changements
+  </ion-button>
+</ion-content>

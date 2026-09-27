@@ -2,6 +2,10 @@
 .iconYellow {
   color: #F4E242;
 }
+/* Contour des étoiles de note d'article */
+.star-outline {
+  color: #F4E242;
+}
 .mon-element-cliquable {
   cursor: pointer; /* Change la souris en main au survol */
 }
@@ -72,4 +76,20 @@ ion-button {
   min-width: 40px;
   height: 40px;
   padding: 0;
+}
+.btn-search-thin ion-button {
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+}
+.btn-search-butt ion-button {
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+}
+.recherche-produits ion-searchbar{
+  background: transparent;
+  padding: 0 8px 10px 8px;
+  --min-height: 50px;
+  margin-top: -5px;
 }

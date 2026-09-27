@@ -1,5 +1,7 @@
 {
   "name": "Y-trendsetters",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

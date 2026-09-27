@@ -15,13 +15,22 @@
   </ion-header> 
   <ion-list>
     <ion-item>
-    <ion-label position="floating">Nom d'utilisateur</ion-label>
-    <ion-input type="text" [(ngModel)]="mdp"></ion-input>
+      <ion-label position="floating">E-mail</ion-label>
+    <ion-input type="email" [(ngModel)]="email" name="email"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label position="floating">E-mail</ion-label>
-    <ion-input type="email" [(ngModel)]="email"></ion-input>
+    <ion-label position="floating">Mot de passe</ion-label>
+    <ion-input [type]="isPasswordVisible ? 'text' : 'password'" [(ngModel)]="mdp" name="mdp"></ion-input>
+    
   </ion-item>
+  <ion-note *ngIf="mdp.length > 0 && mdp.length < 6" color="danger" style="padding-left: 16px;">
+      Minimum 6 caractères
+    </ion-note>
   </ion-list>
-  <ion-button expand="block" class="ion-margin-top" (click)="onLogin()">CONNECTION</ion-button>
+  <ion-button expand="block" class="ion-margin-top" (click)="onLogin()">LOGIN</ion-button>
+  <div class="ion-text-center ion-margin-top">
+    <p style="font-size: 0.9em; color: gray;">
+      Pas encore de compte ? <a (click)="navCtrl.navigateForward('/register')">S'inscrire</a>
+    </p>
+  </div>
 </ion-content>

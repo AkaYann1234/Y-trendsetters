@@ -1,0 +1,69 @@
+// Fond gris clair pour toute la page
+.gray-bg {
+  --background: #2c2d31;
+}
+
+.search-section {
+  --min-height: 120px;
+  
+  .welcome-text {
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .custom-search {
+    --background: #ffffff;
+    --border-radius: 12px;
+    --placeholder-color: #000000;
+    padding: 0;
+  }
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #888;
+  margin: 20px 5px 10px 5px;
+  letter-spacing: 1px;
+}
+
+// Tuiles de catégories
+.help-tile {
+  background: white;
+  cursor: pointer;
+  margin: 5px;
+  padding: 20px 10px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease-in-out;
+
+  &:active {
+    transform: scale(0.95);
+    background: #f9f9f9;
+  }
+
+  ion-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+// Liste FAQ
+.faq-list {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}

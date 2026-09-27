@@ -7,6 +7,7 @@ import { Product } from '../models/interface-models';
   providedIn: 'root'
 })
 export class DatabaseService {
+
   private sqlite: SQLiteConnection = new SQLiteConnection(CapacitorSQLite);
   private db!: SQLiteDBConnection;
   private dbName = 'applicationmobile.db';
@@ -19,6 +20,11 @@ export class DatabaseService {
 
   private panier: Product[] = [];
 
+  // Stockage simulé des utilisateurs pour le mode navigateur
+  private browserUsers: any[] = [
+    { email: 'akayannuriel123@gmail.com', mot_de_passe: 'N03k05b77@', nom: 'Admin' }
+  ];
+
   constructor() {
     this.initializeDatabase();
     this.chargerDonnees();
@@ -26,16 +32,15 @@ export class DatabaseService {
   private sauvegarder() {
     localStorage.setItem('ma_boutique_produits', JSON.stringify(this.browserProducts));
     localStorage.setItem('ma_boutique_panier', JSON.stringify(this.panier));
+    localStorage.setItem('ma_boutique_users', JSON.stringify(this.browserUsers));
   }
   private chargerDonnees() {
     const savedProducts = localStorage.getItem('ma_boutique_produits');
     const savedPanier = localStorage.getItem('ma_boutique_panier');
-    if (savedProducts) {
-      this.browserProducts = JSON.parse(savedProducts);
-    }
-    if (savedPanier) {
-      this.panier = JSON.parse(savedPanier);
-    }
+    const savedUsers = localStorage.getItem('ma_boutique_users');
+    if (savedProducts) {this.browserProducts = JSON.parse(savedProducts);}
+    if (savedPanier) {this.panier = JSON.parse(savedPanier);}
+    if (savedUsers) {this.browserUsers = JSON.parse(savedUsers);}
   }
 
   async initializeDatabase() {
@@ -49,14 +54,22 @@ export class DatabaseService {
       this.db = await this.sqlite.createConnection(this.dbName, false, 'no-encryption', 1, false);
       await this.db.open();
 
-      const createTable = `
+      const createTableProduct = `
         CREATE TABLE IF NOT EXISTS products (
           id TEXT PRIMARY KEY, name TEXT, description TEXT, price REAL, 
           details TEXT, category TEXT, state TEXT, createdAt TEXT, 
           availability TEXT, city TEXT, averageStar REAL, numberOfReviews INTEGER
         );
       `;
-      await this.db.execute(createTable);
+      const tableUsers = `
+        CREATE TABLE IF NOT EXISTS utilisateurs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          email TEXT UNIQUE,
+          mot_de_passe TEXT
+        );`
+        ;
+      await this.db.execute(createTableProduct);
+      await this.db.execute(tableUsers);
       console.log('Base de données SQLite initialisée sur mobile');
     } catch (error) {
       console.error('Erreur SQLite :', error);
@@ -94,7 +107,7 @@ async updateProduct(updatedProduct: Product): Promise<void> {
 }
 async login(email: string, mdp: string): Promise<boolean> {
   // Récupérer la liste des utilisateurs (simulée ou réelle)
-  const users = JSON.parse(localStorage.getItem('utilisateurs') || '[]');
+  const users = await this.getUsersFromDB();
   
   // Chercher l'utilisateur avec l'email et le mot de passe correspondants
   const user = users.find((u: any) => u.email === email && u.mot_de_passe === mdp);
@@ -106,6 +119,17 @@ async login(email: string, mdp: string): Promise<boolean> {
   }
   return false;
 }
+  async getUsersFromDB(): Promise<any[]> {
+    if (!this.isNative) {
+      return this.browserUsers;
+    }
+    try {
+      const result = await this.db.query('SELECT * FROM utilisateurs');
+      return result.values || [];
+    } catch (error) {
+      return [];
+    }
+  }
 
   async addProduct(product: Product): Promise<void> {
     if (!this.isNative) {
@@ -135,6 +159,7 @@ async login(email: string, mdp: string): Promise<boolean> {
   }
   async addToCart(product: Product): Promise<void> {
   this.panier.push(product);
+  this.sauvegarder();
   console.log('Produit ajouté au panier:', product);
   }
   async getCartItems(): Promise<Product[]> {
@@ -149,4 +174,9 @@ async login(email: string, mdp: string): Promise<boolean> {
   return this.panier.reduce((total, product) => total + (product.price || 0), 0);
   }
   
+  removeFromCart(productId: string) {
+  this.panier = this.panier.filter(item => item.id !== productId);
+  this.sauvegarder();
+  console.log(`Produit avec ID ${productId} retiré du panier.`);
+ }
 }

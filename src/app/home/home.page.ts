@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController } from '@ionic/angular';
+import { NavController, AlertController, ActionSheetController, ToastController,IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { DatabaseService } from '../services/database.service';
 import { Product } from '../models/interface-models';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-
 
 
 
@@ -18,14 +16,22 @@ import { IonicModule } from '@ionic/angular';
   standalone: false,
 })
 export class HomePage {
+  searchTerm: string = '';
+filteredArticles: Product[] = [];
+showSearch: boolean = false;
   Articles: Product[] = [];
+  isLoggedIn: boolean = false;
+  aDesNouveauxMessages: boolean = false;
   constructor(public navCtrl: NavController,private readonly router: Router,
     public AlertCtrl: AlertController,public actionCtrl: ActionSheetController,
-    private readonly dbService: DatabaseService) {
+    private readonly dbService: DatabaseService, private toastCtrl: ToastController) {
   }
 
   async ngOnInit() {
     this.Articles = await this.dbService.getProducts();
+    this.checkMessages();
+
+    
     if (this.Articles.length == 0) {
       // Add sample data
       const sampleProducts: Product[] = [
@@ -33,9 +39,9 @@ export class HomePage {
         {
           id: '1',
           name: 'Téléphone',
-          description: 'Iphone 17',
+          description: 'Iphone17',
           price: 411,
-          details: 'téléphone très résistant à la pointe de la technologie vous permettant dêtre connecté à internet tout en étant à la mode  grâce à son design innovant',
+          details: 'Téléphone très résistant à la pointe de la technologie vous permettant dêtre connecté à internet tout en étant à la mode  grâce à son design innovant',
           category: 'Electronics',
           state: 'Nouveau',
           createdAt: new Date(),
@@ -61,7 +67,7 @@ export class HomePage {
           createdAt: new Date(),
           availability: { isAvailable: true, type: 'In Stock' },
           city: 'Toulouse',
-          averageStar: 4.2,
+          averageStar: 4,
           numberOfReviews: 8,
           picture: [
             'assets/icon/imgs/ORDINATEUR/MacBookPro13.jpg',
@@ -123,8 +129,11 @@ export class HomePage {
     }
     this.Articles = await this.dbService.getProducts();
     console.log('Articles après ajout des exemples:', this.Articles);
+    
   }
     }
+    
+    this.filteredArticles = [...this.Articles];
   }
 
   showDetails(article: Product) {
@@ -169,18 +178,20 @@ export class HomePage {
   await alert.present();
 }
 
+// 1. Première étape : Choisir l'article dans la liste
 async presentActionSheetModifier() {
   const buttons = this.Articles.map(article => {
     return {
       text: article.name,
       handler: () => {
-        this.modifierLesArticles(article); // Appelle de la fonction modifier article
+        // Au lieu d'aller direct à la modification, on propose le choix
+        this.presentActionSheetChoixAction(article); 
       }
     };
   });
 
   const actionSheet = await this.actionCtrl.create({
-    header: 'Choisir l\'article à modifier',
+    header: 'Choisir un article',
     buttons: [
       ...buttons,
       { text: 'Annuler', role: 'cancel' }
@@ -189,8 +200,38 @@ async presentActionSheetModifier() {
   await actionSheet.present();
 }
 
+// 2. Deuxième étape : Choisir l'action (Modifier ou Supprimer)
+async presentActionSheetChoixAction(article: Product) {
+  const actionSheet = await this.actionCtrl.create({
+    header: `Que voulez-vous faire pour ${article.name} ?`,
+    buttons: [
+      {
+        text: 'Modifier',
+        icon: 'create-outline',
+        handler: () => {
+          this.modifierLesArticles(article); // Appelle votre fonction existante
+        }
+      },
+      {
+        text: 'Supprimer',
+        role: 'destructive',
+        icon: 'trash-outline',
+        handler: () => {
+          this.confirmerSuppression(article); // Appelle votre fonction de suppression
+        }
+      },
+      {
+        text: 'Annuler',
+        role: 'cancel'
+      }
+    ]
+  });
+  await actionSheet.present();
+}
+
+
   modifierLesArticles(article: Product) {
-    this.router.navigate(['/sell-article'], { state: { articleToEdit: article } });
+    this.router.navigate(['/ajout-details'], { state: { articleToEdit: article } });
   }
   async ouvrirAppareilPhoto() {
   const image = await Camera.getPhoto({
@@ -212,4 +253,130 @@ async presentActionSheetModifier() {
     this.router.navigate(['/login']);
   }
 
+  async ionViewWillEnter() {
+    // On vérifie si une session existe dans le stockage local
+    const session = localStorage.getItem('session_utilisateur');
+    this.isLoggedIn = session !== null;
+    
+    // Rafraîchir les produits au cas où
+    this.Articles = await this.dbService.getProducts();
+    this.filteredArticles = [...this.Articles];
+    this.checkMessages();
+  }
+  // L'alerte de confirmation stratégique
+  async confirmerDeconnexion() {
+    const alert = await this.AlertCtrl.create({
+      header: 'Déconnexion',
+      message: 'Voulez-vous vraiment vous déconnecter ?',
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Oui, sortir',
+          handler: () => {
+            this.deconnecter();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  // Fonction pour se déconnecter (Optionnel mais recommandé)
+  public deconnecter() {
+    localStorage.removeItem('session_utilisateur');
+    this.isLoggedIn = false;
+    this.navCtrl.navigateRoot('/login');
+  }
+ 
+  async presentActionSheetRechercher() {
+    const buttons = this.Articles.map(article => {
+      return {
+        text: article.name,
+        handler: () => {
+          this.showDetails(article); // Affiche les détails de l'article sélectionné
+        }
+      };
+    });
+  
+    const actionSheet = await this.actionCtrl.create({
+      header: 'Rechercher un article',
+      buttons: [
+        ...buttons,
+        { text: 'Annuler', role: 'cancel' }
+      ]
+    });
+    await actionSheet.present();
+  }
+  //  fonction pour filtrer les articles
+filterArticles(event: any) {
+  const val = event.target.value;
+  if (val && val.trim() !== '') {
+    this.filteredArticles = this.Articles.filter((article) => {
+      return article.name.toLowerCase().indexOf(val.toLowerCase()) > -1;
+    });
+  } else {
+    this.filteredArticles = [...this.Articles];
+  }
+ }
+ // Fonction pour basculer l'affichage de la recherche
+toggleSearch() {
+  this.showSearch = !this.showSearch;
+  if (!this.showSearch) {
+    this.filteredArticles = [...this.Articles]; // Réinitialise si on ferme
+    this.searchTerm = '';
+  }
+ }
+  ouvrirLePorteFeuilleElectronique() {
+    this.router.navigate(['/porte-feuille']);
+  }
+  aProposDeLapplication() {
+    this.router.navigate(['/a-propos']);
+  }
+  Assistance() {
+    this.router.navigate(['/assistance']);
+  }
+  ouvrirLesParametres() {
+    this.router.navigate(['/parametres']);
+  }
+  OuvrirLaMessagerie() {
+    this.router.navigate(['/messagerie']);
+  }
+  checkMessages() {
+    // 1. Ta liste de messages (simulée ou réelle)
+    const notifications = [
+      { id: 1, lu: false }, // Un message non lu
+      { id: 2, lu: true }
+    ];
+    const lus = JSON.parse(localStorage.getItem('messages_lus') || '[]');
+    
+    this.aDesNouveauxMessages = notifications.some(n => !lus.includes(n.id));
+  }
+  async clicMessagerie(event: any) {
+    const isLogged = localStorage.getItem('session_utilisateur') !== null;
+
+    if (!isLogged) {
+      // INTERDICTION D'ACCÈS
+      const toast = await this.toastCtrl.create({
+        message: 'Veuillez vous connecter pour avoir accès à cette partie messagerie.',
+        duration: 4000,
+        color: 'warning',
+        position: 'bottom',
+        buttons: [
+          {
+            text: 'SE CONNECTER',
+            handler: () => { this.router.navigate(['/login']); }
+          }
+        ]
+      });
+      await toast.present();
+    } else {
+      // ACCÈS AUTORISÉ
+      this.router.navigate(['/messagerie']);
+    }
+  }
 }

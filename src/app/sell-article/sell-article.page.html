@@ -3,20 +3,24 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title>Vendre un article</ion-title>
+    <ion-title>{{ isEditing ? 'Modifier l\'article' : 'Vendre un article' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div *ngIf="photoPrise" class="ion-margin-bottom">
-    <img [src]="photoPrise" style="border-radius: 10px; width: 100%;" />
+  <div *ngIf="photos.length > 0" class="ion-margin-bottom">
+    <img [src]="photos[0]" style="border-radius: 10px; width: 100%;" />
+
+    <p style="text-align: center; font-size: 0.8em; color: gray;">
+      {{ photos.length }} photo(s) sélectionnée(s)
+    </p>
   </div>
   
   <ion-list>
-   <ion-icon *ngIf="!photoPrise" name="camera" style="font-size: 64px;" color="dark"></ion-icon>
+   <ion-icon *ngIf="photos.length === 0" name="camera" style="font-size: 64px;" color="dark"></ion-icon>
 
   <ion-button expand="block" (click)="chargerPhoto()" class="ion-margin-bottom">
-    {{ photoPrise ? 'CHANGER LA PHOTO' : 'APPUYEZ POUR AJOUTER UNE PHOTO' }}
+    {{ photos.length > 0 ? 'CHANGER LA PHOTO' : 'APPUYEZ POUR AJOUTER UNE PHOTO' }}
   </ion-button>
   <ion-item>
     <ion-label position="floating">Nom de l'article</ion-label>

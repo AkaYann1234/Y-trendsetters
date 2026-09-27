@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/porte-feuille"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Retirer des fonds</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card color="light">
+    <ion-card-content>
+      <p>Solde disponible : <strong>{{ soldeActuel.toFixed(2) }} €</strong></p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header><ion-label>Montant du retrait</ion-label></ion-list-header>
+  <ion-item class="ion-margin-top">
+    <ion-label position="floating">Montant à retirer (€)</ion-label>
+    <ion-input type="number" [(ngModel)]="montantARetirer" placeholder="0.00"></ion-input>
+  </ion-item>
+
+  <ion-list-header class="ion-margin-top"><ion-label>Informations de paiement</ion-label></ion-list-header>
+    <ion-item>
+      <ion-label position="floating">Numéro de carte</ion-label>
+      <ion-input type="text" placeholder="0000 0000 0000 0000" [(ngModel)]="cardNum"></ion-input>
+    </ion-item>
+    
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">MM/AA</ion-label>
+          <ion-input type="text" placeholder="12/26" [(ngModel)]="cardExp" (ionInput)="formatExpiry($event)"
+      maxlength="5"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">CVV</ion-label>
+          <ion-input type="password" placeholder="123" [(ngModel)]="cardCvv"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-item class="custom-input">
+      <ion-label position="stacked">Nom du titulaire</ion-label>
+      <ion-input type="text" placeholder="Prénom Nom" [(ngModel)]="cardHolderName"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="montantARetirer > 0" class="ion-padding-start ion-margin-top" style="font-size: 0.9em; color: #666;">
+    <p>Frais de transaction (1% + 0.30€) : <strong>{{ frais.toFixed(2) }} €</strong></p>
+    <p>Total débité du compte : <strong color="danger">{{ totalADeduire.toFixed(2) }} €</strong></p>
+  </div>
+
+  <ion-button expand="block" (click)="validerRetrait()" color="danger" class="ion-margin-top" [disabled]="montantARetirer <= 0">
+    CONFIRMER LE RETRAIT
+  </ion-button>
+</ion-content>

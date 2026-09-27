@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Assistance</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar color="secondary" class="search-section">
+    <div class="ion-padding">
+      <h2 class="welcome-text">Comment pouvons-nous vous aider ?</h2>
+      <ion-searchbar 
+        placeholder="Rechercher une réponse..." 
+        mode="ios" 
+        class="custom-search">
+      </ion-searchbar>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding gray-bg">
+  <h6 class="section-title">CATÉGORIES GÉNÉRALES</h6>
+  
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size="6">
+        <div class="help-tile" (click)="ouvrirAideCompte()">
+          <ion-icon name="person-circle-outline" color="secondary"></ion-icon>
+          <span>Mon Compte</span>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="help-tile" (click)="ouvrirAidePaiement()">
+          <ion-icon name="wallet-outline" color="secondary"></ion-icon>
+          <span>Paiements</span>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="help-tile" (click)="ouvrirAideCommandes()">
+          <ion-icon name="cart-outline" color="secondary"></ion-icon>
+          <span>Commandes</span>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="help-tile" (click)="ouvrirAideSecurite()">
+          <ion-icon name="shield-checkmark-outline" color="secondary"></ion-icon>
+          <span>Sécurité</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <h6 class="section-title">QUESTIONS POPULAIRES</h6>
+  <ion-list lines="full" class="faq-list">
+    <ion-item button detail="true">
+      <ion-label>Comment valider mon compte ?</ion-label>
+    </ion-item>
+    <ion-item button detail="true">
+      <ion-label>Délais pour un retrait de fonds</ion-label>
+    </ion-item>
+    <ion-item button detail="true">
+      <ion-label>Contacter un vendeur</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="warning" (click)="contacterSupport()">
+      <ion-icon name="chatbubbles-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

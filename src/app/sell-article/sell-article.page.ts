@@ -17,7 +17,7 @@ export class SellArticlePage implements OnInit {
   nomArticle: string = '';
   prixArticle: number = 0;
   descriptionArticle: string = "";
-  photoPrise: string | undefined;
+  photos: string[] = [];
   isEditing: boolean | undefined;
   articleId: any='';
   
@@ -34,27 +34,31 @@ export class SellArticlePage implements OnInit {
       this.articleId = a.id;
       this.nomArticle = a.name;
       this.prixArticle = a.price;
-      this.photoPrise = (a.picture && a.picture.length > 0) ? a.picture[0] : undefined;
+      this.photos = a.picture ? [...a.picture] : [];
     }else if (state && state.imagePrise) {
-      this.photoPrise = state.imagePrise;
+      this.photos.push(state.imagePrise);
+      this.isEditing = false;
     }
   }
   // Fonction pour choisir une photo dans la galerie
   async choisirPhoto() {
-    try {
+   try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
         resultType: CameraResultType.Uri,
-        source: CameraSource.Photos // Ouvre la galerie
+        source: CameraSource.Prompt // Propose Galerie ou Appareil photo
       });
 
-      if (image) {
-        this.photoPrise = image.webPath;
+      if (image && image.webPath) {
+        this.photos.push(image.webPath);
       }
     } catch (error) {
-      console.error('Erreur lors du choix de la photo', error);
+      console.error('Erreur lors de l\'ajout de la photo', error);
     }
+  }
+  supprimerPhoto(index: number) {
+    this.photos.splice(index, 1);
   }
   async publierAnnonce() {
     
@@ -73,7 +77,7 @@ export class SellArticlePage implements OnInit {
       id: this.isEditing ? this.articleId : Date.now().toString(), // Génère un ID unique
       name: this.nomArticle,
       price: this.prixArticle,
-      picture: this.photoPrise ? [this.photoPrise] : [],
+      picture: this.photos,
       description: 'Article mis en vente par l\'utilisateur',
       category: 'Divers',
       state: 'Occasion',
@@ -106,7 +110,7 @@ export class SellArticlePage implements OnInit {
     this.navCtrl.navigateBack('/home');
   }
   async chargerPhoto() {
-   try {
+  try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
@@ -114,8 +118,8 @@ export class SellArticlePage implements OnInit {
         source: CameraSource.Photos // Force l'ouverture de la GALERIE
       });
 
-      if (image) {
-        this.photoPrise = image.webPath; // Met à jour l'affichage avec la nouvelle photo
+      if (image && image.webPath) {
+        this.photos.push(image.webPath); // Met à jour l'affichage avec la nouvelle photo
       }
     } catch (error) {
       console.error('Erreur lors du choix de la photo', error);

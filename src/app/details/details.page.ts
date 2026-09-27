@@ -2,9 +2,10 @@ import { state } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonicModule, NavController, NavParams, AlertController } from '@ionic/angular';
+import { IonicModule, NavController, NavParams, AlertController, ModalController } from '@ionic/angular';
 import { Product } from '../models/interface-models';
 import { DatabaseService } from '../services/database.service';
+import { ImageViewerComponent } from '../components/image-viewer/image-viewer.component';
 
 @Component({
   selector: 'app-details',
@@ -18,7 +19,7 @@ export class DetailsPage implements OnInit {
   productDetails : any;
   selectedColor: string = '';
 
-  constructor(public navCtrl: NavController, private route : ActivatedRoute, private alertController: AlertController, private dbService: DatabaseService) {}
+  constructor(public navCtrl: NavController, private route : ActivatedRoute, private alertController: AlertController, private dbService: DatabaseService,private modalCtrl: ModalController) {}
 
   ngOnInit() {
     
@@ -28,7 +29,7 @@ export class DetailsPage implements OnInit {
       this.productDetails = state.articleData;
       console.log('Données reçues:', this.productDetails);
     }else{
-      console.error('ERREUR')
+      console.error('Aucun details trouvés dans l\'état de l\'historique.');
     }
   }
   ionViewDidLoad(){
@@ -123,4 +124,17 @@ export class DetailsPage implements OnInit {
     await alert.present();
   }
 
+  goBack() {
+    this.navCtrl.back(); //le back() permet une melleur navigation que pop() qui est plus ancien et peut causer des problèmes de navigation dans certains cas.
+  }
+  async ouvrirZoom(url: string) {
+  const modal = await this.modalCtrl.create({
+    component: ImageViewerComponent,
+    componentProps: {
+      imageSrc: url
+    },
+    cssClass: 'fullscreen-image-modal' // Classe pour le style global
+  });
+  return await modal.present();
+  }
 }

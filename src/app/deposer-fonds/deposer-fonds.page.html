@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/porte-feuille"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Déposer des fonds</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-list-header><ion-label>Montant du dépôt</ion-label></ion-list-header>
+    <ion-item>
+      <ion-label position="floating">Montant (€)</ion-label>
+      <ion-input type="number" [(ngModel)]="montant"></ion-input>
+    </ion-item>
+
+    <ion-list-header class="ion-margin-top"><ion-label>Informations de paiement</ion-label></ion-list-header>
+    <ion-item>
+      <ion-label position="floating">Numéro de carte</ion-label>
+      <ion-input type="text" placeholder="0000 0000 0000 0000" [(ngModel)]="cardNum"></ion-input>
+    </ion-item>
+    
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">MM/AA</ion-label>
+          <ion-input type="text" placeholder="12/26" [(ngModel)]="cardExp" (ionInput)="formatExpiry($event)"
+      maxlength="5"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">CVV</ion-label>
+          <ion-input type="password" placeholder="123" [(ngModel)]="cardCvv"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-list>
+
+  <ion-button expand="block" color="success" class="ion-margin-top" (click)="validerDepot()">
+    CONFIRMER LE TRANSFERT
+  </ion-button>
+</ion-content>

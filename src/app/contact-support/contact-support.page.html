@@ -1,0 +1,37 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/assistance"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Contacter le support</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding gray-bg">
+  <div class="header-info ion-text-center">
+    <ion-icon name="people-outline" color="secondary" style="font-size: 48px;"></ion-icon>
+    <h3>Une question ?</h3>
+    <p>Remplissez le formulaire ci-dessous, notre équipe vous répondra par mail sous un délai de 24h.</p>
+  </div>
+
+  <ion-list lines="none" class="contact-form">
+    <ion-item class="custom-input">
+      <ion-label position="stacked">Objet de votre demande</ion-label>
+      <ion-select placeholder="Choisir un sujet" mode="ios">
+        <ion-select-option value="compte">Problème de compte</ion-select-option>
+        <ion-select-option value="paiement">Problème de paiement</ion-select-option>
+        <ion-select-option value="technique">Bug technique</ion-select-option>
+        <ion-select-option value="autre">Autre</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="custom-input">
+      <ion-label position="stacked">Votre message</ion-label>
+      <ion-textarea rows="6" placeholder="Expliquez-nous en détail..."></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="danger" class="ion-margin-top send-button" (click)="envoyerMessage()">
+    ENVOYER MON MESSAGE
+  </ion-button>
+</ion-content>
