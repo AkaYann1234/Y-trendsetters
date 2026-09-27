@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { Product } from '../models/interface-models';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,12 @@ export class DatabaseService {
 
   private panier: Product[] = [];
 
+  // 1. Déclaration du BehaviorSubject avec la valeur par défaut (ex: 0.02)
+  private soldeSubject = new BehaviorSubject<number>(0.02);
+  
+  // 2. Observable public auquel les pages vont s'abonner
+  public solde$: Observable<number> = this.soldeSubject.asObservable();
+
   // Stockage simulé des utilisateurs pour le mode navigateur
   private browserUsers: any[] = [
     { email: 'akayannuriel123@gmail.com', mot_de_passe: 'N03k05b77@', nom: 'Admin' }
@@ -33,14 +40,19 @@ export class DatabaseService {
     localStorage.setItem('ma_boutique_produits', JSON.stringify(this.browserProducts));
     localStorage.setItem('ma_boutique_panier', JSON.stringify(this.panier));
     localStorage.setItem('ma_boutique_users', JSON.stringify(this.browserUsers));
+    localStorage.setItem('ma_boutique_solde', JSON.stringify(this.soldeSubject.value));
   }
   private chargerDonnees() {
     const savedProducts = localStorage.getItem('ma_boutique_produits');
     const savedPanier = localStorage.getItem('ma_boutique_panier');
     const savedUsers = localStorage.getItem('ma_boutique_users');
+    const savedSolde = localStorage.getItem('ma_boutique_solde');
     if (savedProducts) {this.browserProducts = JSON.parse(savedProducts);}
     if (savedPanier) {this.panier = JSON.parse(savedPanier);}
     if (savedUsers) {this.browserUsers = JSON.parse(savedUsers);}
+    if (savedSolde !== null) {
+      this.soldeSubject.next(JSON.parse(savedSolde));
+    }
   }
 
   async initializeDatabase() {
@@ -179,4 +191,26 @@ async login(email: string, mdp: string): Promise<boolean> {
   this.sauvegarder();
   console.log(`Produit avec ID ${productId} retiré du panier.`);
  }
+ // Obtenir la valeur actuelle instantanée
+  getSoldeValue(): number {
+    return this.soldeSubject.value;
+  }
+
+  // Mettre à jour le solde (ex: rechargement du portefeuille)
+  updateSolde(nouveauSolde: number): void {
+    this.soldeSubject.next(nouveauSolde);
+    this.sauvegarder();
+  }
+
+  // Débiter le solde si suffisant
+  deductSolde(montant: number): boolean {
+    const soldeActuel = this.soldeSubject.value;
+    if (soldeActuel >= montant) {
+      const nouveauSolde = soldeActuel - montant;
+      this.soldeSubject.next(nouveauSolde);
+      this.sauvegarder();
+      return true;
+    }
+    return false;
+  }
 }

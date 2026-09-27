@@ -2,6 +2,7 @@ import { Component,OnInit } from '@angular/core';
 import { AlertController, IonicModule, NavController, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { DatabaseService } from '../services/database.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -13,6 +14,8 @@ export class CartPage {
   // Pour l'instant, on peut simuler ou récupérer des données
   cartItems: any[] = []; 
   totalSomme: any = 0;
+  soldeActuel: any = 0;
+  private soldeSub!: Subscription;
 
   constructor(private navCtrl: NavController, private dbService: DatabaseService, private alertCtrl: AlertController, private toastCtrl: ToastController) {}
 
@@ -24,7 +27,18 @@ export class CartPage {
   // On demande à la base de données les articles stockés
   this.cartItems = await this.dbService.getCartItems();
   this.totalSomme = this.dbService.getTotalPrice();
+
+  // Abonnement dynamique au solde en temps réel
+    this.soldeSub = this.dbService.solde$.subscribe(solde => {
+      this.soldeActuel = solde;
+    });
 }
+ngOnDestroy() {
+    // automatisation de l'abonnement pour éviter les fuites 
+    if (this.soldeSub) {
+      this.soldeSub.unsubscribe();
+    }
+  }
   getTotalPrice(): number {
     return this.cartItems.reduce((total, item) => total + item.price, 0);
   }
@@ -51,14 +65,34 @@ export class CartPage {
   }
 
   async finaliserLaCommande() {
+    if (this.soldeActuel < this.totalSomme) {
     // 2. Affichage du message de confirmation avec le prix débité
-    const toast = await this.toastCtrl.create({
-      message: `Commande validée ! Un montant de ${this.totalSomme} € sera débité de votre portefeuille.`,
-      duration: 3000,
-      color: 'success',
-      position: 'middle'
-    });
-    await toast.present();
+   const toastErreur = await this.toastCtrl.create({
+        message: `Solde insuffisant ! Votre solde actuel est de ${this.soldeActuel.toFixed(2)} €, mais le total est de ${this.totalSomme} €.`,
+        duration: 3500,
+        color: 'danger',
+        position: 'middle'
+      });
+      await toastErreur.present();
+    return; // Bloque la commande
+    }
+
+    // 2. Déduction dynamique du solde
+    const succes = this.dbService.deductSolde(this.totalSomme);
+
+    if (succes) {
+      const toastSucces = await this.toastCtrl.create({
+        message: `Commande validée ! Un montant de ${this.totalSomme} € a été débité.`,
+        duration: 3000,
+        color: 'success',
+        position: 'middle'
+      });
+      await toastSucces.present();
+
+      this.dbService.clearCart();
+
+      this.navCtrl.navigateForward('/porte-feuille');
+    }
 
     // 3. Vider le panier dans la base de données
     this.dbService.clearCart();

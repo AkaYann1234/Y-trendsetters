@@ -1,0 +1,19 @@
+.action-btn {
+    flex: 1; // Permet aux boutons de se partager équitablement la largeur
+    min-width: 0; // Empêche le bouton de sortir de son conteneur si le texte est trop long
+    height: auto; // Laisse le bouton s'agrandir en hauteur si la police augmente
+    min-height: 48px;
+    
+    // Style du texte à l'intérieur
+    span {
+      white-space: nowrap; // Empêche la ruptuer brusque des mots si possible
+      overflow: hidden;
+      text-overflow: ellipsis; // Ajoute "..." si la taille de l'écran est trop petit
+      font-size: clamp(12px, 3.5vw, 16px); // Taille de police  adaptatee
+    }
+
+    ion-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0; // Empêche l'icône de s'écraser
+    }
+  }

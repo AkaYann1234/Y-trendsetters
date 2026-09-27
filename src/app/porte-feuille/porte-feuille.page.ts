@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { DatabaseService } from '../services/database.service';
 
 @Component({
   selector: 'app-porte-feuille',
@@ -10,13 +12,33 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class PorteFeuillePage {
+export class PorteFeuillePage implements OnInit, OnDestroy{
   isLoggedIn: boolean = false;
   solde: number = 0;
+  private soldeSub!: Subscription;
   userEmail: string = '';
   historiqueAchats: any[] = [];
 
-  constructor(private navCtrl: NavController) { }
+  constructor(private navCtrl: NavController,private dbService: DatabaseService) { }
+
+  ngOnInit() {
+    // Écoute dynamique de toute modification du solde
+    this.soldeSub = this.dbService.solde$.subscribe(solde => {
+      this.solde = solde;
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.soldeSub) {
+      this.soldeSub.unsubscribe();
+    }
+  }
+
+  // Exemple de fonction pour recharger le portefeuille
+  rechargerSolde(montant: number) {
+    const nouveauSolde = this.solde + montant;
+    this.dbService.updateSolde(nouveauSolde);
+  }
 
   ionViewWillEnter() {
     this.checkLoginStatus();
